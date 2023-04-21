@@ -50,17 +50,22 @@ public static class Pokerus
         if (!IsObtainable(pk))
             return IsSusceptible(strain, days);
         if (pk.Format <= 2)
-            return IsStrainValid2(strain, days);
-        return IsStrainValid(strain, days);
+            return IsStrainValid2(strain);
+        return IsStrainValid(strain);
     }
 
     /// <inheritdoc cref="IsStrainValid(PKM,int,int)"/>
-    public static bool IsStrainValid2(int strain, int days) => strain switch
-    {
-        0 when days is not 0 => false,
-        // 8 is possible for Gen2
-        _ => true,
-    };
+    /// <remarks>
+    /// Strains 9+ are not obtainable due to game programming error (jmp label too early).
+    /// </remarks>
+    public static bool IsStrainValid2(int strain) => strain <= 8;
+
+    /// <inheritdoc cref="IsStrainValid(PKM,int,int)"/>
+    /// <remarks>
+    /// Gen3 R/S have a 30/255 chance of giving strain 0, and a 1/255 chance of giving strain 8.
+    /// Transfers will retain strain 0/8 and they're still able to infect others.
+    /// </remarks>
+    public static bool IsStrainValid(int strain) => strain <= 0xF;
 
     /// <inheritdoc cref="IsStrainValid(PKM,int,int)"/>
     /// <remarks>
