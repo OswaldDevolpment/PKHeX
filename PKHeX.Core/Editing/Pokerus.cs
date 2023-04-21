@@ -67,6 +67,13 @@ public static class Pokerus
     /// </remarks>
     public static bool IsStrainValid(int strain) => strain <= 0xF;
 
+    /// <inheritdoc cref="IsStrainValid(PKM,int,int)"/>
+    /// <remarks>
+    /// Gen3 R/S have a 30/255 chance of giving strain 0, and a 1/255 chance of giving strain 8.
+    /// Transfers will retain strain 0/8 and they're still able to infect others.
+    /// </remarks>
+    public static bool IsStrainValid(int strain, int days) => true;
+
     /// <summary>
     /// Checks if the Pokérus value for Duration is possible to have on the input entity.
     /// </summary>
